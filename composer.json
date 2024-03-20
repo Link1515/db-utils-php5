@@ -1,0 +1,25 @@
+{
+    "name": "link1515/db-utils-php5",
+    "keywords": [
+        "database",
+        "db",
+        "db utils",
+        "php 5"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Link1515\\DbUtilsPhp5\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Link1515",
+            "email": "mocliamglink@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">= 5.3"
+    }
+}
