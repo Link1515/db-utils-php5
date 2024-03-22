@@ -39,7 +39,7 @@ The BaseORM class has some common methods for creating, querying, updating and d
 ```php
 BaseORM::createForTable(string $tableName, array $data): bool;
 
-BaseORM::getAllForTable(string $tableName, int $page = 1, int $perPage = 20): array;
+BaseORM::getAllForTable(string $tableName, ?array $columns = null, int $page = 1, int $perPage = 20): array;
 
 BaseORM::getByIdForTable(string $tableName, int|string $id, ?array $columns = null): array|null;
 
@@ -80,7 +80,7 @@ In this case, you need to get the instance by getInstance() method and operate o
 ```php
 create(array $data): bool;
 
-getAll(int $page = 1, ?int $perPage = null): array;
+getAll(?array $columns = null, int $page = 1, ?int $perPage = null): array;
 
 getById(int|string $id, ?int $columns = null): array|null;
 
