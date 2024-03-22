@@ -1,5 +1,6 @@
 {
     "name": "link1515/db-utils-php5",
+    "description": "For users working with PHP 5.x environments, this package provides a convenient solution. It provides encapsulated utilities for database operation.",
     "keywords": [
         "database",
         "db",
@@ -8,6 +9,7 @@
     ],
     "type": "library",
     "license": "MIT",
+    "readme": "README.md",
     "autoload": {
         "psr-4": {
             "Link1515\\DbUtilsPhp5\\": "src/"
