@@ -32,6 +32,10 @@ class DB
    */
   public static function connect($id, $drive, $host, $database, $user, $passwd)
   {
+    if (isset (self::$pdoList[$id])) {
+      throw new \RuntimeException('The id "' . $id . '" is already in use.');
+    }
+
     $defaultOptions = [
       PDO::ATTR_EMULATE_PREPARES => false,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -58,13 +62,12 @@ class DB
   public static function use($id)
   {
     if (!isset (self::$pdoList[$id])) {
-      throw new \RuntimeException('PDO with ID ' . $id . ' does not exist');
+      throw new \RuntimeException('PDO with ID "' . $id . '" does not exist');
     }
 
     if (self::$currentPdo !== self::$pdoList[$id]) {
       self::$currentPdo = self::$pdoList[$id];
     }
-
   }
 
   /**

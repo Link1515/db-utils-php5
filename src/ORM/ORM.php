@@ -111,7 +111,6 @@ class ORM
     $result = $stmt->execute(['id' => $id]);
 
     return $result;
-
   }
 
   /**
