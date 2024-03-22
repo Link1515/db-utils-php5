@@ -4,12 +4,18 @@ namespace Link1515\DbUtilsPhp5\ORM;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+use PDO;
 use Link1515\DbUtilsPhp5\DB;
 use Link1515\DbUtilsPhp5\Utils\StringUtils;
 use Link1515\DbUtilsPhp5\Utils\ArrayUtils;
 
 class ORM
 {
+  /**
+   * @property ?PDO $pdo
+   */
+  protected static $pdo = null;
+
   /**
    * @param string $tableName
    * @param ?array $columns
@@ -24,7 +30,8 @@ class ORM
       " FROM " . $tableName .
       " LIMIT " . self::sqlLimitValue($page, $perPage);
 
-    $stmt = DB::PDO()->prepare($query);
+    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $stmt = $pdo->prepare($query);
     $stmt->execute();
 
     $result = $stmt->fetchAll();
@@ -45,7 +52,8 @@ class ORM
       " FROM " . $tableName .
       " WHERE " . self::sqlAssignSingleColumn('id');
 
-    $stmt = DB::PDO()->prepare($query);
+    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $id]);
 
     $result = $stmt->fetch();
@@ -68,7 +76,8 @@ class ORM
         VALUES 
           (" . self::sqlInsertValues($columns) . ")";
 
-    $stmt = DB::PDO()->prepare($query);
+    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $stmt = $pdo->prepare($query);
     $result = $stmt->execute($data);
 
     return $result;
@@ -88,10 +97,11 @@ class ORM
 
     $query =
       "UPDATE " . $tableName .
-      " SET " . self::sqlAssignColumns($columns, true) .
+      " SET " . self::sqlAssignColumns($columns) .
       " WHERE " . self::sqlAssignSingleColumn('id');
 
-    $stmt = DB::PDO()->prepare($query);
+    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $stmt = $pdo->prepare($query);
     $result = $stmt->execute(array_merge($data, ['id' => $id]));
 
     return $result;
@@ -106,7 +116,8 @@ class ORM
   {
     $query = "DELETE FROM " . $tableName . " WHERE " . self::sqlAssignSingleColumn('id');
 
-    $stmt = DB::PDO()->prepare($query);
+    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $stmt = $pdo->prepare($query);
     $result = $stmt->execute(['id' => $id]);
 
     return $result;

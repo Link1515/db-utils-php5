@@ -5,6 +5,7 @@ namespace Link1515\DbUtilsPhp5\ORM;
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Link1515\DbUtilsPhp5\DB;
+use PDO;
 
 abstract class BaseORM extends ORM
 {
@@ -12,6 +13,11 @@ abstract class BaseORM extends ORM
    * @property self $instance
    */
   protected static $instance = null;
+
+  /**
+   * @property PDO $pdo
+   */
+  protected static $pdo;
 
   /**
    * @property string $connectionId;
@@ -38,7 +44,7 @@ abstract class BaseORM extends ORM
       throw new \RuntimeException('The "protected $tableName" property must be set to a valid table name.');
     }
 
-    DB::use($this->connectionId);
+    static::$pdo = DB::PDO($this->connectionId);
   }
 
   /**
