@@ -41,6 +41,9 @@ abstract class BaseORM extends ORM
     DB::use($this->connectionId);
   }
 
+  /**
+   * @return static
+   */
   public static function getInstance()
   {
     if (is_null(static::$instance)) {
@@ -51,17 +54,18 @@ abstract class BaseORM extends ORM
   }
 
   /**
+   * @param ?array $columns
    * @param int $page
    * @param int $perPage
    * @return array
    */
-  public function getAll($page = 1, $perPage = null)
+  public function getAll($columns = null, $page = 1, $perPage = null)
   {
-    return parent::getAllForTable($this->tableName, $page, $perPage ?: $this->perPage);
+    return parent::getAllForTable($this->tableName, $columns, $page, $perPage ?: $this->perPage);
   }
 
   /**
-   * @param int $id
+   * @param int|string $id
    * @param array $columns
    * @return array|null
    */
@@ -80,7 +84,7 @@ abstract class BaseORM extends ORM
   }
 
   /**
-   * @param int $id
+   * @param int|string $id
    * @param array $data
    * @return bool
    */
@@ -90,7 +94,7 @@ abstract class BaseORM extends ORM
   }
 
   /**
-   * @param int $id
+   * @param int|string $id
    * @return bool
    */
   public function deleteById($id)
