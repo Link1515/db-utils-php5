@@ -12,14 +12,15 @@ class ORM
 {
   /**
    * @param string $tableName
+   * @param ?array $columns
    * @param int $page
    * @param int $perPage
    * @return array
    */
-  public static function getAllForTable($tableName, $page = 1, $perPage = 20)
+  public static function getAllForTable($tableName, $columns = null, $page = 1, $perPage = 20)
   {
     $query =
-      "SELECT * " .
+      "SELECT " . self::sqlSelectColumns($columns) .
       " FROM " . $tableName .
       " LIMIT " . self::sqlLimitValue($page, $perPage);
 
@@ -33,7 +34,7 @@ class ORM
 
   /**
    * @param string $tableName
-   * @param int $id
+   * @param int|string $id
    * @param array $columns
    * @return array|null
    */
@@ -77,7 +78,7 @@ class ORM
 
   /**
    * @param string $tableName
-   * @param int $id
+   * @param int|string $id
    * @param array $data
    * @return bool
    */
@@ -91,16 +92,14 @@ class ORM
       " WHERE " . self::sqlAssignSingleColumn('id');
 
     $stmt = DB::PDO()->prepare($query);
-    $result = $stmt->execute($data);
+    $result = $stmt->execute(array_merge($data, ['id' => $id]));
 
     return $result;
-
-
   }
 
   /**
    * @param string $tableName
-   * @param int $id
+   * @param int|string $id
    * @return bool
    */
   public static function deleteByIdForTable($tableName, $id)
@@ -124,7 +123,7 @@ class ORM
     $sqlStr = $getAllColumn ?
       '*' :
       ArrayUtils::joinWithComma($columns, function ($column) {
-        return StringUtils::camelToSnake($column) . " " . $column;
+        return $column . " " . $column;
       });
 
     return StringUtils::spaceAround($sqlStr);
@@ -138,7 +137,7 @@ class ORM
   {
     $sqlStr =
       ArrayUtils::joinWithComma($columns, function ($column) {
-        return StringUtils::camelToSnake($column);
+        return $column;
       });
 
     return StringUtils::spaceAround($sqlStr);
@@ -164,7 +163,7 @@ class ORM
    */
   protected static function sqlAssignSingleColumn($key)
   {
-    $sqlStr = StringUtils::camelToSnake($key) . " = :$key";
+    $sqlStr = $key . " = :$key";
 
     return StringUtils::spaceAround($sqlStr);
   }
@@ -184,7 +183,7 @@ class ORM
 
     $sqlStr =
       ArrayUtils::joinWithComma($columns, function ($column) {
-        return StringUtils::camelToSnake($column) . " = :$column";
+        return $column . " = :$column";
       });
 
     return StringUtils::spaceAround($sqlStr);
