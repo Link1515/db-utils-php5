@@ -20,7 +20,7 @@ abstract class BaseORM extends ORM
   protected static $pdo;
 
   /**
-   * @property string $connectionId;
+   * @property ?string $connectionId;
    */
   protected $connectionId = null;
 
@@ -62,7 +62,7 @@ abstract class BaseORM extends ORM
   /**
    * @param ?array $columns
    * @param int $page
-   * @param int $perPage
+   * @param ?int $perPage
    * @return array
    */
   public function getAll($columns = null, $page = 1, $perPage = null)
@@ -72,8 +72,8 @@ abstract class BaseORM extends ORM
 
   /**
    * @param int|string $id
-   * @param array $columns
-   * @return array|null
+   * @param ?array $columns
+   * @return ?array
    */
   public function getById($id, $columns = null)
   {

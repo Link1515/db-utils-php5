@@ -42,8 +42,8 @@ class ORM
   /**
    * @param string $tableName
    * @param int|string $id
-   * @param array $columns
-   * @return array|null
+   * @param ?array $columns
+   * @return ?array
    */
   public static function getByIdForTable($tableName, $id, $columns = null)
   {
@@ -81,8 +81,6 @@ class ORM
     $result = $stmt->execute($data);
 
     return $result;
-
-
   }
 
   /**
@@ -124,7 +122,7 @@ class ORM
   }
 
   /**
-   * @param array|null $columns
+   * @param ?array $columns
    * @return string
    */
   protected static function sqlSelectColumns($columns = null)
