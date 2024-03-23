@@ -129,12 +129,16 @@ class ORM
    */
   protected static function sqlSelectColumns($columns = null)
   {
-    $getAllColumn = is_null($columns) || count($columns) === 0;
+    if (is_null($columns) || count($columns) === 0) {
+      return ' * ';
+    }
 
-    $sqlStr = $getAllColumn ?
-      '*' :
-      ArrayUtils::joinWithComma($columns, function ($column) {
-        return $column . " " . $column;
+    $colKeys = array_keys($columns);
+    $sqlStr =
+      ArrayUtils::joinWithComma($colKeys, function ($colKey) use ($columns) {
+        return is_int($colKey) ?
+          $columns[$colKey] :
+          $colKey . " " . $columns[$colKey];
       });
 
     return StringUtils::spaceAround($sqlStr);
