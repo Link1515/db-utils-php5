@@ -44,7 +44,7 @@ class DB
     ];
 
     $pdo = new PDO(
-      $drive . ":host=" . $host . ";dbname=" . $database,
+      $drive . ':host=' . $host . ';dbname=' . $database,
       $user,
       $passwd,
       $defaultOptions

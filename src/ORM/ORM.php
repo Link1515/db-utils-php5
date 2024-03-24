@@ -26,9 +26,9 @@ class ORM
   public static function getAllForTable($tableName, $columns = null, $page = 1, $perPage = 20)
   {
     $query =
-      "SELECT " . self::sqlSelectColumns($columns) .
-      " FROM " . $tableName .
-      " LIMIT " . self::sqlLimitValue($page, $perPage);
+      'SELECT ' . self::sqlSelectColumns($columns) .
+      ' FROM ' . $tableName .
+      ' LIMIT ' . self::sqlLimitValue($page, $perPage);
 
     $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
@@ -48,9 +48,9 @@ class ORM
   public static function getByIdForTable($tableName, $id, $columns = null)
   {
     $query =
-      "SELECT " . self::sqlSelectColumns($columns) .
-      " FROM " . $tableName .
-      " WHERE " . self::sqlAssignSingleColumn('id');
+      'SELECT ' . self::sqlSelectColumns($columns) .
+      ' FROM ' . $tableName .
+      ' WHERE ' . self::sqlAssignSingleColumn('id');
 
     $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
@@ -70,11 +70,11 @@ class ORM
   {
     $columns = array_keys($data);
 
-    $query = "
-        INSERT INTO " . $tableName . " 
-          (" . self::sqlInsertColumns($columns) . ") 
+    $query =
+      'INSERT INTO ' . $tableName . '
+          (' . self::sqlInsertColumns($columns) . ') 
         VALUES 
-          (" . self::sqlInsertValues($columns) . ")";
+          (' . self::sqlInsertValues($columns) . ')';
 
     $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
@@ -94,9 +94,9 @@ class ORM
     $columns = array_keys($data);
 
     $query =
-      "UPDATE " . $tableName .
-      " SET " . self::sqlAssignColumns($columns) .
-      " WHERE " . self::sqlAssignSingleColumn('id');
+      'UPDATE ' . $tableName .
+      ' SET ' . self::sqlAssignColumns($columns) .
+      ' WHERE ' . self::sqlAssignSingleColumn('id');
 
     $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
@@ -112,7 +112,9 @@ class ORM
    */
   public static function deleteByIdForTable($tableName, $id)
   {
-    $query = "DELETE FROM " . $tableName . " WHERE " . self::sqlAssignSingleColumn('id');
+    $query =
+      'DELETE FROM ' . $tableName .
+      ' WHERE ' . self::sqlAssignSingleColumn('id');
 
     $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
@@ -136,7 +138,7 @@ class ORM
       ArrayUtils::joinWithComma($colKeys, function ($colKey) use ($columns) {
         return is_int($colKey) ?
           $columns[$colKey] :
-          $colKey . " " . $columns[$colKey];
+          $colKey . ' ' . $columns[$colKey];
       });
 
     return StringUtils::spaceAround($sqlStr);
@@ -164,7 +166,7 @@ class ORM
   {
     $sqlStr =
       ArrayUtils::joinWithComma($columns, function ($column) {
-        return ":$column";
+        return ':' . $column;
       });
 
     return StringUtils::spaceAround($sqlStr);
@@ -176,7 +178,7 @@ class ORM
    */
   protected static function sqlAssignSingleColumn($key)
   {
-    $sqlStr = $key . " = :$key";
+    $sqlStr = $key . ' = :' . $key;
 
     return StringUtils::spaceAround($sqlStr);
   }
@@ -190,13 +192,13 @@ class ORM
   {
     if ($filterId) {
       $columns = array_filter($columns, function ($key) {
-        return $key !== "id";
+        return $key !== 'id';
       }, ARRAY_FILTER_USE_KEY);
     }
 
     $sqlStr =
       ArrayUtils::joinWithComma($columns, function ($column) {
-        return $column . " = :$column";
+        return $column . ' = :' . $column;
       });
 
     return StringUtils::spaceAround($sqlStr);
@@ -209,7 +211,7 @@ class ORM
    */
   protected static function sqlLimitValue($page, $prePage)
   {
-    $sqlStr = ($page - 1) * $prePage . ", " . $prePage;
+    $sqlStr = ($page - 1) * $prePage . ', ' . $prePage;
 
     return StringUtils::spaceAround($sqlStr);
   }

@@ -19,6 +19,6 @@ class StringUtils
    */
   public static function spaceAround($input)
   {
-    return " " . $input . " ";
+    return ' ' . $input . ' ';
   }
 }
