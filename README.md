@@ -106,11 +106,11 @@ class OrderORM extends BaseORM
 
   // your own method
   public function getByIdWithUserInfo($id) {
-    $query = "
-      SELECT * FROM " . $this->tableName . "
+    $query =
+      'SELECT * FROM ' . $this->tableName . '
       LEFT JOIN users ON users.id = orders.user_id
       WHERE orders.id = :id
-    ";
+    ';
     $stmt = DB::PDO()->prepare($query);
     $stmt->execute(['id' => $id]);
     return $stmt->fetch();
