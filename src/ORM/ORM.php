@@ -93,7 +93,7 @@ class ORM
 
     $query =
       'UPDATE ' . $tableName .
-      ' SET ' . self::sqlAssignColumns($columns) .
+      ' SET ' . self::sqlAssignColumns($columns, true) .
       ' WHERE ' . self::sqlAssignSingleColumn('id');
 
     $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
@@ -189,9 +189,9 @@ class ORM
   protected static function sqlAssignColumns($columns, $filterId = false)
   {
     if ($filterId) {
-      $columns = array_filter($columns, function ($key) {
-        return $key !== 'id';
-      }, ARRAY_FILTER_USE_KEY);
+      $columns = array_filter($columns, function ($column) {
+        return $column !== 'id';
+      });
     }
 
     $sqlStr =
