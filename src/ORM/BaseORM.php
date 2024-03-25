@@ -14,10 +14,7 @@ abstract class BaseORM extends ORM
    */
   protected static $instance = null;
 
-  /**
-   * @property PDO $pdo
-   */
-  protected static $pdo;
+  protected static $_pdo;
 
   /**
    * @property ?string $connectionId;
@@ -44,7 +41,7 @@ abstract class BaseORM extends ORM
       throw new \RuntimeException('The "protected $tableName" property must be set to a valid table name.');
     }
 
-    static::$pdo = DB::PDO($this->connectionId);
+    static::$_pdo = DB::PDO($this->connectionId);
   }
 
   /**
@@ -57,6 +54,14 @@ abstract class BaseORM extends ORM
     }
 
     return static::$instance;
+  }
+
+  /**
+   * @return PDO
+   */
+  public function getPDO()
+  {
+    return static::$_pdo;
   }
 
   /**

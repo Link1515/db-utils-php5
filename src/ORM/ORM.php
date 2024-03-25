@@ -12,9 +12,9 @@ use Link1515\DbUtilsPhp5\Utils\ArrayUtils;
 class ORM
 {
   /**
-   * @property ?PDO $pdo
+   * @property ?PDO $_pdo
    */
-  protected static $pdo = null;
+  protected static $_pdo = null;
 
   /**
    * @param string $tableName
@@ -30,7 +30,7 @@ class ORM
       ' FROM ' . $tableName .
       ' LIMIT ' . self::sqlLimitValue($page, $perPage);
 
-    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 
@@ -52,7 +52,7 @@ class ORM
       ' FROM ' . $tableName .
       ' WHERE ' . self::sqlAssignSingleColumn('id');
 
-    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $id]);
 
@@ -76,7 +76,7 @@ class ORM
         VALUES 
           (' . self::sqlInsertValues($columns) . ')';
 
-    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $result = $stmt->execute($data);
 
@@ -98,7 +98,7 @@ class ORM
       ' SET ' . self::sqlAssignColumns($columns) .
       ' WHERE ' . self::sqlAssignSingleColumn('id');
 
-    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $result = $stmt->execute(array_merge($data, ['id' => $id]));
 
@@ -116,7 +116,7 @@ class ORM
       'DELETE FROM ' . $tableName .
       ' WHERE ' . self::sqlAssignSingleColumn('id');
 
-    $pdo = isset (static::$pdo) ? static::$pdo : DB::PDO();
+    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $result = $stmt->execute(['id' => $id]);
 
