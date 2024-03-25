@@ -2,8 +2,6 @@
 
 namespace Link1515\DbUtilsPhp5\ORM;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
 use PDO;
 use Link1515\DbUtilsPhp5\DB;
 use Link1515\DbUtilsPhp5\Utils\StringUtils;
