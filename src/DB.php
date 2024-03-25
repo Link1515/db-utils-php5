@@ -24,13 +24,13 @@ class DB
    * Connect to db and set it to current PDO
    * 
    * @param string $id
-   * @param string $drive
+   * @param string $driver
    * @param string $host
    * @param string $database
    * @param string $user
    * @param string $passwd
    */
-  public static function connect($id, $drive, $host, $database, $user, $passwd)
+  public static function connect($id, $driver, $host, $database, $user, $passwd)
   {
     if (isset (self::$pdoList[$id])) {
       throw new \RuntimeException('The id "' . $id . '" is already in use.');
@@ -44,7 +44,7 @@ class DB
     ];
 
     $pdo = new PDO(
-      $drive . ':host=' . $host . ';dbname=' . $database,
+      $driver . ':host=' . $host . ';dbname=' . $database,
       $user,
       $passwd,
       $defaultOptions
