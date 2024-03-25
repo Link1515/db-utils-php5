@@ -71,6 +71,45 @@ DB::use('conn_2');
 BaseORM::getAllForTable('user');
 ```
 
+BaseORM build-in methods:
+
+```php
+DB::connect('conn', 'mysql', 'localhost:3306', 'bookstore', 'root', 'root');
+
+// create
+BaseORM::createForTable('users', [
+  'name' => 'Lynk',
+  'phone' => '0922333444',
+  'created_at' => date('Y-m-d H:i:s'),
+  'updated_at' => date('Y-m-d H:i:s'),
+]);
+
+// query all
+BaseORM::getAllForTable('users');
+// query all and specified field
+BaseORM::getAllForTable('users', ['name', 'phone']);
+// query all and specified field with alias
+BaseORM::getAllForTable('users', ['name' => 'username', 'phone' => 'cellphone']);
+// query all and set pagination (default is page = 1 and perpage = 20)
+BaseORM::getAllForTable('users', null, 2, 30);
+
+// query by id
+BaseORM::getByIdForTable('users', 1);
+// query by id and specified field
+BaseORM::getByIdForTable('users', 1, ['name', 'created_at']);
+// query by id and specified field with alias
+BaseORM::getByIdForTable('users', 1, ['name', 'created_at' => 'createdAt']);
+
+// update by id
+BaseORM::updateByIdForTable('users', 1, [
+  'phone' => '0933555999',
+  'updated_at' => date('Y-m-d H:i:s')
+]);
+
+// delete by id
+BaseORM::deleteByIdForTable('users', 1);
+```
+
 ### Customized ORM
 
 For more complex applications, you can create your own ORM class to inherit BasicORM. Complete complex logic by writing sql statement.
@@ -97,7 +136,7 @@ use Link1515\DbUtilsPhp5\DB;
 
 class OrderORM extends BaseORM
 {
-  // Required. Automatially use the connection with the specified id.
+  // Required. Automatially use the connection with the specified id. Use $this->getPDO() to get connection.
   protected $connectionId = 'conn_1';
   // Required. Automatially pass the tableName pararmeter to build-in methods (getAll(), getById(), create(), deleteById()).
   protected $tableName = 'orders';
@@ -111,7 +150,8 @@ class OrderORM extends BaseORM
       LEFT JOIN users ON users.id = orders.user_id
       WHERE orders.id = :id
     ';
-    $stmt = DB::PDO()->prepare($query);
+    // use getPDO method to make sure we are using correct connection
+    $stmt = $this->getPDO()->prepare($query);
     $stmt->execute(['id' => $id]);
     return $stmt->fetch();
   }
