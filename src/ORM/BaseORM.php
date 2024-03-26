@@ -64,13 +64,12 @@ abstract class BaseORM extends ORM
 
   /**
    * @param ?array $columns
-   * @param int $page
-   * @param ?int $perPage
+   * @param ?array $options
    * @return array
    */
-  public function getAll($columns = null, $page = 1, $perPage = null)
+  public function getAll($columns = null, $options)
   {
-    return parent::getAllForTable($this->tableName, $columns, $page, $perPage ?: $this->perPage);
+    return parent::getAllForTable($this->tableName, $columns, $options);
   }
 
   /**

@@ -17,15 +17,19 @@ class ORM
   /**
    * @param string $tableName
    * @param ?array $columns
-   * @param int $page
-   * @param int $perPage
+   * @param ?array $options
    * @return array
    */
-  public static function getAllForTable($tableName, $columns = null, $page = 1, $perPage = 20)
+  public static function getAllForTable($tableName, $columns = null, $options = [])
   {
+    $page = isset ($options['page']) ? $options['page'] : 1;
+    $perPage = isset ($options['perPage']) ? $options['perPage'] : 20;
+    $orderBy = isset ($options['orderBy']) ? $options['orderBy'] : 'id ASC';
+
     $query =
       'SELECT ' . self::sqlSelectColumns($columns) .
       ' FROM ' . $tableName .
+      ' ORDER BY ' . (is_array($orderBy) ? implode(', ', $orderBy) : $orderBy) .
       ' LIMIT ' . self::sqlLimitValue($page, $perPage);
 
     $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
