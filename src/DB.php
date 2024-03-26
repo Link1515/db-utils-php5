@@ -59,7 +59,7 @@ class DB
    * 
    * @param string $id
    */
-  public static function use($id)
+  public static function useConnection($id)
   {
     if (!isset (self::$pdoList[$id])) {
       throw new \RuntimeException('PDO with ID "' . $id . '" does not exist');
@@ -79,7 +79,7 @@ class DB
   public static function PDO($id = null)
   {
     if (isset ($id)) {
-      self::use($id);
+      self::useConnection($id);
     }
 
     return self::$currentPdo;

@@ -26,7 +26,7 @@ use Link1515\DbUtilsPhp5\DB;
 DB::connect(string $id, string $drive, string $host, string $database, string $user, string $password): void;
 
 // Use the database with the specified id.
-DB::use(string $id): void;
+DB::useConnection(string $id): void;
 
 // Get the PDO with the specified id. If no id is passed, the default connection PDO will be returned.
 DB::PDO(?string $id): PDO;
@@ -64,10 +64,10 @@ Multiple connection:
 DB::connect('conn_1', 'mysql', 'localhost:3306', 'shop', 'root', 'root');
 DB::connect('conn_2', 'mysql', 'localhost:3306', 'app', 'root', 'root');
 
-DB::use('conn_1');
+DB::useConnection('conn_1');
 BaseORM::createForTable('orders', ['user_id' => 1, 'price' => 100]);
 
-DB::use('conn_2');
+DB::useConnection('conn_2');
 BaseORM::getAllForTable('user');
 ```
 
