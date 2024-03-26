@@ -67,8 +67,9 @@ abstract class BaseORM extends ORM
    * @param ?array $options
    * @return array
    */
-  public function getAll($columns = null, $options)
+  public function getAll($columns = null, $options = [])
   {
+    $options = array_merge(['perPage' => $this->perPage], $options);
     return parent::getAllForTable($this->tableName, $columns, $options);
   }
 
