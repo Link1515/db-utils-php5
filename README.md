@@ -37,11 +37,26 @@ DB::PDO(?string $id): PDO;
 The BaseORM class has some common methods for creating, querying, updating and deleting. In simple applications, stataic methods can be called directly for specified table operation.
 
 ```php
-BaseORM::createForTable(string $tableName, array $data): bool;
-
-BaseORM::getAllForTable(string $tableName, ?array $columns = null, int $page = 1, int $perPage = 20): array;
+/**
+ * options:
+ * {
+ *   page: number|string
+ *   perPage: number|string
+ *   orderBy: string|array
+ * }
+ *
+ * ex (default value):
+ * [
+ *   'page' => 1,
+ *   'perPage' => 20,
+ *   'orderBy' => 'id ASC'
+ * ]
+ */
+BaseORM::getAllForTable(string $tableName, ?array $columns = null, ?array $options): array;
 
 BaseORM::getByIdForTable(string $tableName, int|string $id, ?array $columns = null): array|null;
+
+BaseORM::createForTable(string $tableName, array $data): bool;
 
 BaseORM::updateByIdForTable(string $tableName, int|string $id, array $data): bool;
 
@@ -90,8 +105,15 @@ BaseORM::getAllForTable('users');
 BaseORM::getAllForTable('users', ['name', 'phone']);
 // query all and specified field with alias
 BaseORM::getAllForTable('users', ['name' => 'username', 'phone' => 'cellphone']);
-// query all and set pagination (default is page = 1 and perpage = 20)
-BaseORM::getAllForTable('users', null, 2, 30);
+// query all and set pagination
+BaseORM::getAllForTable('users', null, [
+  'page' => 1,
+  'perPage' => 30
+]);
+// query all and order by
+BaseORM::getAllForTable('users', null, [
+  'orderBy' => ['department_id DESC', 'id ASC'],
+]);
 
 // query by id
 BaseORM::getByIdForTable('users', 1);
@@ -117,11 +139,11 @@ For more complex applications, you can create your own ORM class to inherit Basi
 In this case, you need to get the instance by getInstance() method and operate on it. The following methods are built into the instance:
 
 ```php
-create(array $data): bool;
-
-getAll(?array $columns = null, int $page = 1, ?int $perPage = null): array;
+getAll(?array $columns = null, ?array $options): array;
 
 getById(int|string $id, ?int $columns = null): array|null;
+
+create(array $data): bool;
 
 updateById(int|string $id, array $data): bool;
 
