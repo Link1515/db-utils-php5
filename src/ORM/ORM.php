@@ -55,14 +55,7 @@ class ORM
 
     $result = $stmt->fetchAll();
 
-    $count = self::getCountForTable($tableName);
-
-    return [
-      'data' => $result,
-      'page' => $page,
-      'perPage' => $perPage,
-      'total' => $count
-    ];
+    return $result;
   }
 
   /**
