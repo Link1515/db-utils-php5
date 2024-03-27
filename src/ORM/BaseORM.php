@@ -63,6 +63,14 @@ abstract class BaseORM extends ORM
   }
 
   /**
+   * @return int
+   */
+  public function getCount()
+  {
+    return parent::getCountForTable($this->tableName);
+  }
+
+  /**
    * @param ?array $columns
    * @param ?array $options
    * @return array

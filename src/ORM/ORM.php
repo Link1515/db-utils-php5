@@ -16,15 +16,32 @@ class ORM
 
   /**
    * @param string $tableName
+   * @return int 
+   */
+  public static function getCountForTable($tableName)
+  {
+    $query =
+      'SELECT COUNT(*) total' . ' FROM ' . $tableName;
+
+    $pdo = isset(static::$_pdo) ? static::$_pdo : DB::PDO();
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $count = $stmt->fetch()['total'];
+
+    return $count;
+  }
+
+  /**
+   * @param string $tableName
    * @param ?array $columns
    * @param ?array $options
    * @return array
    */
   public static function getAllForTable($tableName, $columns = null, $options = [])
   {
-    $page = isset ($options['page']) ? $options['page'] : 1;
-    $perPage = isset ($options['perPage']) ? $options['perPage'] : 20;
-    $orderBy = isset ($options['orderBy']) ? $options['orderBy'] : 'id ASC';
+    $page = isset($options['page']) ? $options['page'] : 1;
+    $perPage = isset($options['perPage']) ? $options['perPage'] : 20;
+    $orderBy = isset($options['orderBy']) ? $options['orderBy'] : 'id ASC';
 
     $query =
       'SELECT ' . self::sqlSelectColumns($columns) .
@@ -32,7 +49,7 @@ class ORM
       ' ORDER BY ' . (is_array($orderBy) ? implode(', ', $orderBy) : $orderBy) .
       ' LIMIT ' . self::sqlLimitValue($page, $perPage);
 
-    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
+    $pdo = isset(static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 
@@ -54,7 +71,7 @@ class ORM
       ' FROM ' . $tableName .
       ' WHERE ' . self::sqlAssignSingleColumn('id');
 
-    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
+    $pdo = isset(static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $id]);
 
@@ -78,7 +95,7 @@ class ORM
         VALUES 
           (' . self::sqlInsertValues($columns) . ')';
 
-    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
+    $pdo = isset(static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $result = $stmt->execute($data);
 
@@ -100,7 +117,7 @@ class ORM
       ' SET ' . self::sqlAssignColumns($columns, true) .
       ' WHERE ' . self::sqlAssignSingleColumn('id');
 
-    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
+    $pdo = isset(static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $result = $stmt->execute(array_merge($data, ['id' => $id]));
 
@@ -118,7 +135,7 @@ class ORM
       'DELETE FROM ' . $tableName .
       ' WHERE ' . self::sqlAssignSingleColumn('id');
 
-    $pdo = isset (static::$_pdo) ? static::$_pdo : DB::PDO();
+    $pdo = isset(static::$_pdo) ? static::$_pdo : DB::PDO();
     $stmt = $pdo->prepare($query);
     $result = $stmt->execute(['id' => $id]);
 
