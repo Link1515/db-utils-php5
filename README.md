@@ -37,22 +37,19 @@ DB::PDO(?string $id): PDO;
 The BaseORM class has some common methods for creating, querying, updating and deleting. In simple applications, stataic methods can be called directly for specified table operation.
 
 ```php
-/**
- * options:
- * {
- *   page: number|string
- *   perPage: number|string
- *   orderBy: string|array
- * }
- *
- * ex (default value):
- * [
- *   'page' => 1,
- *   'perPage' => 20,
- *   'orderBy' => 'id ASC'
- * ]
- */
+// options
+// - page (int)
+// - perPage (int)
+// - orderBy (string|array)
+// default value
+// $options = [
+//   'page' => 1,
+//   'perPage' => 20,
+//   'orderBy' => 'id ASC'
+// ]
 BaseORM::getAllForTable(string $tableName, ?array $columns = null, ?array $options): array;
+
+BaseORM::getCountForTable(string $tableName): int;
 
 BaseORM::getByIdForTable(string $tableName, int|string $id, ?array $columns = null): array|null;
 
@@ -107,13 +104,15 @@ BaseORM::getAllForTable('users', ['name', 'phone']);
 BaseORM::getAllForTable('users', ['name' => 'username', 'phone' => 'cellphone']);
 // query all and set pagination
 BaseORM::getAllForTable('users', null, [
-  'page' => 1,
+  'page' => 2,
   'perPage' => 30
 ]);
 // query all and order by
 BaseORM::getAllForTable('users', null, [
   'orderBy' => ['department_id DESC', 'id ASC'],
 ]);
+
+BaseORM::getCountForTable('users');
 
 // query by id
 BaseORM::getByIdForTable('users', 1);
@@ -140,6 +139,8 @@ In this case, you need to get the instance by getInstance() method and operate o
 
 ```php
 getAll(?array $columns = null, ?array $options): array;
+
+getCount(): int;
 
 getById(int|string $id, ?int $columns = null): array|null;
 
