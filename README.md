@@ -22,6 +22,12 @@ The DB class will help you manage the database connection. You can connect to mu
 ```php
 use Link1515\DbUtilsPhp5\DB;
 
+// set PDO charset. Default value is utf8mb4
+DB::setPDOCharset(string $charset);
+
+// set PDO options.
+DB::setPDOOptions(array $options);
+
 // Conect to the database. The current connection is used as the default.
 DB::connect(string $id, string $drive, string $host, string $database, string $user, string $password): void;
 
@@ -37,6 +43,8 @@ DB::PDO(?string $id): PDO;
 The BaseORM class has some common methods for creating, querying, updating and deleting. In simple applications, stataic methods can be called directly for specified table operation.
 
 ```php
+use Link1515\DbUtilsPhp5\ORM\BaseORM;
+
 // options
 // - page (int)
 // - perPage (int)
