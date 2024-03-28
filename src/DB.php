@@ -7,6 +7,17 @@ use PDO;
 class DB
 {
   /**
+   * @property array $pdoOptions
+   */
+  private static $pdoOptions = [];
+
+
+  /**
+   * @property array $pdoCharset
+   */
+  private static $pdoCharset = 'utf8mb4';
+
+  /**
    * @property array $pdoList
    */
   private static $pdoList;
@@ -32,26 +43,44 @@ class DB
    */
   public static function connect($id, $driver, $host, $database, $user, $passwd)
   {
-    if (isset (self::$pdoList[$id])) {
+    if (isset(self::$pdoList[$id])) {
       throw new \RuntimeException('The id "' . $id . '" is already in use.');
     }
 
     $defaultOptions = [
-      PDO::ATTR_EMULATE_PREPARES => false,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-      PDO::ATTR_PERSISTENT => true,
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     ];
 
+    $options = array_merge(self::$pdoOptions, $defaultOptions);
+
     $pdo = new PDO(
-      $driver . ':host=' . $host . ';dbname=' . $database,
+      $driver . ':host=' . $host . ';dbname=' . $database . ';charset=' . self::$pdoCharset,
       $user,
       $passwd,
-      $defaultOptions
+      $options
     );
 
     self::$pdoList[$id] = $pdo;
     self::$currentPdo = $pdo;
+  }
+
+  /**
+   * @param array $options
+   */
+  public static function setPDOOptions($options)
+  {
+    if (is_array($options)) {
+      self::$pdoOptions = $options;
+    }
+  }
+
+  /**
+   * @param string $charset
+   */
+  public static function setPDOCharset($charset)
+  {
+    self::$pdoCharset = $charset;
   }
 
   /**
@@ -61,7 +90,7 @@ class DB
    */
   public static function useConnection($id)
   {
-    if (!isset (self::$pdoList[$id])) {
+    if (!isset(self::$pdoList[$id])) {
       throw new \RuntimeException('PDO with ID "' . $id . '" does not exist');
     }
 
@@ -78,7 +107,7 @@ class DB
    */
   public static function PDO($id = null)
   {
-    if (isset ($id)) {
+    if (isset($id)) {
       self::useConnection($id);
     }
 
