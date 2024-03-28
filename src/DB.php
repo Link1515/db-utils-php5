@@ -50,9 +50,11 @@ class DB
     $defaultOptions = [
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      PDO::ATTR_EMULATE_PREPARES => false,
+      PDO::ATTR_STRINGIFY_FETCHES => false,
     ];
 
-    $options = array_merge(self::$pdoOptions, $defaultOptions);
+    $options = $defaultOptions + self::$pdoOptions;
 
     $pdo = new PDO(
       $driver . ':host=' . $host . ';dbname=' . $database . ';charset=' . self::$pdoCharset,
